@@ -30,9 +30,9 @@ export default {
     return {
       loginFrom: {
         // 手机号
-        mobile: '',
+        mobile: '17603306103',
         // 验证码
-        code: '',
+        code: '246810',
         // 是否同意用户协议
         checked: false
       },
@@ -54,7 +54,18 @@ export default {
   methods: {
     login () {
       this.$refs.loginForm.validate().then(() => {
-        alert(123)
+        this.$axios({
+          url: '/authorizations',
+          method: 'post',
+          data: this.loginFrom
+
+        }).then((res) => {
+          window.localStorage.setItem('user-token', res.data.data.token)
+          this.$message.success('登录成功')
+          this.$router.push('/home')
+        }).catch(() => {
+          this.$message.error('用户名或者密码错误')
+        })
       })
     }
   }
