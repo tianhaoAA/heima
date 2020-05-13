@@ -17,4 +17,13 @@ axios.interceptors.request.use(function (config) {
 // 失败时执行第二个 axios 是支持promise  失败了 我们应该直接reject会直接进入到axios的catch中
   return Promise.reject(error)
 })
+
+// 相应拦截器
+axios.interceptors.response.use(function (response) {
+//  成功的时候执行 回调函数第一个参数 是1响应体
+  // 在拦截器中 需要将数据返回
+  return response.data ? response.data : {}
+}, function () {
+// 失败的时候执行
+})
 export default axios

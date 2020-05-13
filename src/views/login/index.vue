@@ -60,7 +60,7 @@ export default {
           data: this.loginFrom
 
         }).then((res) => {
-          window.localStorage.setItem('user-token', res.data.data.token)
+          window.localStorage.setItem('user-token', res.data.token)
           this.$message.success('登录成功')
           this.$router.push('/home')
         }).catch(() => {
