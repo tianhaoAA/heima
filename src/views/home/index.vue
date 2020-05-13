@@ -10,7 +10,7 @@
     <layout-header></layout-header>
   </el-header>
   <!-- 这里应该放置2级路由容器 -->
-  <el-mian>主要区域</el-mian>
+  <el-main>主要区域</el-main>
 </el-container>
 </el-container>
 </template>
@@ -24,6 +24,9 @@
 //     'layout-header': LayoutHeader
 //   }
 // }
+export default {
+
+}
 </script>
 
 <style>

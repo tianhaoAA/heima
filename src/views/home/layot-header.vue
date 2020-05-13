@@ -8,16 +8,16 @@
     <el-col class="right" :span="12">
       <el-row type="flex" justify="end" align="middle">
  <img
-        src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2628692542,2312708579&fm=26&gp=0.jpg"
+        :src="userInfo.photo"
         alt
       />
       <el-dropdown trigger="click">
         <!-- 显示的内容 -->
-      <span>怀念</span>
+      <span> {{ userInfo.name}} </span>
       <el-dropdown-menu slot="dropdown">
          <el-dropdown-item>个人信息</el-dropdown-item>
          <el-dropdown-item>git地址</el-dropdown-item>
-         <el-dropdown-item>退出</el-dropdown-item>
+         <el-dropdown-item >退出</el-dropdown-item>
       </el-dropdown-menu>
       </el-dropdown>
       </el-row>
@@ -27,7 +27,32 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      // 用户个人信息
+      userInfo: {
+
+      }
+    }
+  },
+  methods: {
+
+  },
+  created () {
+    const token = localStorage.getItem('user-token')
+    this.$axios({
+      url: '/user/profile',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+
+    }).then((res) => {
+      this.userInfo = res.data.data
+      console.log(res)
+    })
+  }
+}
 </script>
 
 <style lang='less' scoped>
