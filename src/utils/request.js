@@ -5,6 +5,7 @@
  *
  **/
 import axios from 'axios'
+import router from '@/router'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 // 请求拦截器
 
@@ -23,7 +24,14 @@ axios.interceptors.response.use(function (response) {
 //  成功的时候执行 回调函数第一个参数 是1响应体
   // 在拦截器中 需要将数据返回
   return response.data ? response.data : {}
-}, function () {
+}, function (error) {
 // 失败的时候执行
+  // error 是错误对象 里面包含了错误的状态码 和相应信息
+
+  if (error.response.status === 401) {
+    localStorage.removeItem('user-token')
+    router.push('/login')
+  }
+  return Promise.reject(error)
 })
 export default axios
