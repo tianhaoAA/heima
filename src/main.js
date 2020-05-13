@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import '@/permission'
 import ElementUI from 'element-ui'
 import Components from '@/components'
 import 'element-ui/lib/theme-chalk/index.css'

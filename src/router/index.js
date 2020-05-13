@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import Home from '../views/home'
 import login from '../views/login'
+import SecondHome from '../views/home/second-home'
 
 Vue.use(VueRouter)
 
@@ -13,7 +14,14 @@ const routes = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        // path 什么都不写 代表二级路由的默认组件
+        path: '',
+        component: SecondHome
+      }
+    ]
   },
   {
     path: '/login',

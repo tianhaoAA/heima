@@ -11,13 +11,13 @@
         :src="userInfo.photo"
         alt
       />
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click"  @command='clickMenu'>
         <!-- 显示的内容 -->
       <span> {{ userInfo.name}} </span>
       <el-dropdown-menu slot="dropdown">
-         <el-dropdown-item>个人信息</el-dropdown-item>
-         <el-dropdown-item>git地址</el-dropdown-item>
-         <el-dropdown-item >退出</el-dropdown-item>
+         <el-dropdown-item command='info'>个人信息</el-dropdown-item>
+         <el-dropdown-item command='git'>git地址</el-dropdown-item>
+         <el-dropdown-item  command='qiut'>退出</el-dropdown-item>
       </el-dropdown-menu>
       </el-dropdown>
       </el-row>
@@ -37,7 +37,16 @@ export default {
     }
   },
   methods: {
+    clickMenu (command) {
+      if (command === 'info') {
 
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/tianhaoAA'
+      } else if (command === 'qiut') {
+        window.localStorage.removeItem('user-token')
+        this.$router.push('/login')
+      }
+    }
   },
   created () {
     const token = localStorage.getItem('user-token')
