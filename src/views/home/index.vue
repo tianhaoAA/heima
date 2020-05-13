@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import LayoutAside from './layot-aside'
-import LayoutHeader from './layot-header'
-export default {
-  components: {
-    'layout-aside': LayoutAside,
-    'layout-header': LayoutHeader
-  }
-}
+// import LayoutAside from './layot-aside'
+// import LayoutHeader from './layot-header'
+// export default {
+//   components: {
+//     'layout-aside': LayoutAside,
+//     'layout-header': LayoutHeader
+//   }
+// }
 </script>
 
 <style>
