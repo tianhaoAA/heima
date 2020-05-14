@@ -2,7 +2,7 @@
 // Vue.use 会调用 对象中的 install方法
 import LayoutHeader from '@/views/home/layot-header.vue'
 import LayoutAside from '@/views/home/layot-aside.vue'
-import BreadCrumb from './common/baead-crumb.vue'
+import BreadCrumb from './common/bread-crumb.vue'
 export default {
   install: function (Vue) {
     //  注册全局 组件 vue

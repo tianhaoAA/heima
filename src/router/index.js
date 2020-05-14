@@ -20,6 +20,10 @@ const routes = [
         // path 什么都不写 代表二级路由的默认组件
         path: '',
         component: SecondHome
+      }, {
+        path: 'comment',
+        // 按需加载
+        component: () => import('@/views/comment')
       }
     ]
   },
