@@ -24,6 +24,10 @@ const routes = [
         path: 'comment',
         // 按需加载
         component: () => import('@/views/comment')
+      },
+      {
+        path: 'marerial',
+        component: () => import('@/views/material')
       }
     ]
   },

@@ -55,7 +55,6 @@ export default {
 
     }).then((res) => {
       this.userInfo = res.data
-      console.log(res)
     })
   }
 }
