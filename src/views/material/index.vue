@@ -3,6 +3,15 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <!-- 放置一个上传的组件 -->
+    <!-- 上传组件要求必须 传action 属性 不传就会报错 -->
+    <el-row type="flex" justify="end">
+      <el-upload :show-file-list="false" :http-request="uploadImg" action="">
+      <!--上传素材  -->
+      <el-button type="primary">上传素材</el-button>
+    </el-upload>
+    </el-row>
+
     <el-tabs v-model="activeName" @tab-click='changTab'>
       <!-- 放置标签 label 表示标签字段名字 -->
       <el-tab-pane label="全部素材" name="all">
@@ -27,6 +36,21 @@
         </div>
       </el-tab-pane>
     </el-tabs>
+    <!-- 放置一个公共的分页组件 -->
+    <el-row type="flex" justify="center" style="height:80%" align="middle">
+     <!-- 放置分页组件 -->
+     <!-- total 总条数
+      current-page 当前页码
+      page-size 每页多少条
+       -->
+     <el-pagination background
+      :total="page.total"
+      :current-page="page.currentaPage"
+      :page-size="page.pageSize"
+      layout="prev, pager,next"
+     @current-change='changePage'
+    ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -37,11 +61,41 @@ export default {
       // 当前选中的标签
       activeName: 'all',
       // 接收素材数据
-      list: []
+      list: [],
+      page: {
+        // 当前的页面
+        currentaPage: 1,
+        // 当前的总数
+        total: 0,
+        // 每页多少条
+        pageSize: 4
+      }
     }
   },
   methods: {
+    // 上传图片素材
+    uploadImg (params) {
+      // params.file 就是需要 上传的图片文件
+      // 接口参数 类型要求是 formDate
+      const data = new FormData()
+      data.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then((res) => {
+        this.getAndMaterial()
+      }).catch(() => {
+        this.$message.error('上传素材失败')
+      })
+    },
+    // 在页面切换时
+    changePage (newPage) {
+      this.page.currentaPage = newPage
+      this.getAndMaterial()
+    },
     changTab () {
+      this.page.currentaPage = 1
       // 根据当前的activeName 来决定是获取那个方面的 数据
       this.getAndMaterial()
     },
@@ -49,10 +103,17 @@ export default {
       this.$axios({
         url: '/user/images',
         params: {
-          collect: this.activeName === 'collect'
+          collect: this.activeName === 'collect',
+          //
+          page: this.page.currentaPage,
+          // 获取每页数量
+          per_page: this.page.pageSize
+
         }
       }).then(res => {
         this.list = res.data.results
+        // 将总条数
+        this.page.total = res.data.total_count
       })
     }
   },
