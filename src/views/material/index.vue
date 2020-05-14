@@ -16,21 +16,21 @@
       <!-- 放置标签 label 表示标签字段名字 -->
       <el-tab-pane label="全部素材" name="all">
         <div class="image-item">
-          <el-card class="img-card" v-for="item in list" :key="item.id">
+          <el-card class="img-card" v-for="(item,index) in list" :key="item.id">
             <!-- 放置图片  -->
-            <img :src="item.url" alt />
+            <img :src="item.url" alt   @click="slectImg(index)"/>
             <el-row class="aixin" type="flex" justify="space-around" align="middle">
               <i class="el-icon-star-off" :style="{ color:item.is_collected?'red':'black'}" @click="shoucanImg(item)"></i>
-              <i class="el-icon-delete" @click="delImg"></i>
+              <i class="el-icon-delete" @click="delImg(item)"></i>
             </el-row>
           </el-card>
         </div>
       </el-tab-pane>
       <el-tab-pane label="收藏素材" name="collect">
        <div class="image-item">
-          <el-card class="img-card" v-for="item in list" :key="item.id">
+          <el-card class="img-card" v-for="(item,index) in list" :key="item.id">
             <!-- 放置图片  -->
-            <img :src="item.url" alt />
+            <img :src="item.url" alt  @click="slectImg(index)"/>
 
           </el-card>
         </div>
@@ -51,6 +51,17 @@
      @current-change='changePage'
     ></el-pagination>
     </el-row>
+    <!-- 放置 一个el-dialog组件 通过visible 属性进行true false设置
+     -->
+     <el-dialog   @opened='openedEnd'  :visible='dialogVisible' @close='dialogVisible=false'>
+       <!-- 放置走马灯组件 -->
+       <el-carousel  ref="myCarousel" indicator-position="outside" height="500">
+         <!-- 放置循环项 -->
+         <el-carousel-item  v-for="item in list" :key="item.id">
+           <img style="width:100%;height:100%" :src="item.url" alt="">
+         </el-carousel-item>
+       </el-carousel>
+     </el-dialog>
   </el-card>
 </template>
 
@@ -69,13 +80,36 @@ export default {
         total: 0,
         // 每页多少条
         pageSize: 4
-      }
+      },
+      dialogVisible: false,
+      clickTndex: -1
     }
   },
   methods: {
-    // 点击删除
-    delImg () {
+    // opened
+    openedEnd () {
+      this.$refs.myCarousel.setActiveItem(this.clickTndex)
+    },
+    // 点击 图片调用
+    slectImg (index) {
+      this.clickTndex = index
 
+      this.dialogVisible = true
+    },
+    // 点击删除
+    delImg (row) {
+      this.$confirm('您是否要删除图片吗?', '提示').then(() => {
+        // 调用删除接口
+        this.$axios({
+          url: `/user/images/${row.id}`,
+          method: 'delete'
+        }).then((res) => {
+          this.getAndMaterial()
+          this.$message.success('操作成功')
+        }).catch(() => {
+          this.$message.error('操作失败')
+        })
+      })
     },
     // 点击收藏取消收藏图片
     shoucanImg (row) {
@@ -87,6 +121,7 @@ export default {
         }
       }).then((res) => {
         this.getAndMaterial()
+        this.$message.success('操作成功')
       }).catch(() => {
         this.$message.error('操作失败')
       })
