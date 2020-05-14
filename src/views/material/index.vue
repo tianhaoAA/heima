@@ -20,8 +20,8 @@
             <!-- 放置图片  -->
             <img :src="item.url" alt />
             <el-row class="aixin" type="flex" justify="space-around" align="middle">
-              <i class="el-icon-star-off"></i>
-              <i class="el-icon-delete"></i>
+              <i class="el-icon-star-off" :style="{ color:item.is_collected?'red':'black'}" @click="shoucanImg(item)"></i>
+              <i class="el-icon-delete" @click="delImg"></i>
             </el-row>
           </el-card>
         </div>
@@ -73,6 +73,24 @@ export default {
     }
   },
   methods: {
+    // 点击删除
+    delImg () {
+
+    },
+    // 点击收藏取消收藏图片
+    shoucanImg (row) {
+      this.$axios({
+        url: `/user/images/${row.id}`,
+        method: 'put',
+        data: {
+          collect: !row.is_collected
+        }
+      }).then((res) => {
+        this.getAndMaterial()
+      }).catch(() => {
+        this.$message.error('操作失败')
+      })
+    },
     // 上传图片素材
     uploadImg (params) {
       // params.file 就是需要 上传的图片文件
