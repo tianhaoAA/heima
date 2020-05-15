@@ -28,6 +28,10 @@ const routes = [
       {
         path: 'marerial',
         component: () => import('@/views/material')
+      },
+      {
+        path: 'publish',
+        component: () => import('@/views/aricles')
       }
     ]
   },
