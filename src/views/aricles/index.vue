@@ -16,7 +16,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文章频道:">
-        <el-select placeholder="请选择频道" v-model="searchFrom.channel_id">
+        <el-select @change="changComditon" placeholder="请选择频道" v-model="searchFrom.channel_id">
           <!-- el-option 是下拉的选项 label 是显示值 value 是绑定值 -->
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
@@ -24,7 +24,7 @@
       <el-form-item label="日期范围:">
         <!-- 时间选择组件  type-->
         <!-- 显示值和存储值得机构不一样 使用 value-format指定绑定值的格式 -->
-        <el-date-picker  value-format="yyyy-MM-dd"  type="daterange" v-model="searchFrom.value1"></el-date-picker>
+        <el-date-picker @change="changComditon" value-format="yyyy-MM-dd"  type="daterange" v-model="searchFrom.value1"></el-date-picker>
       </el-form-item>
     </el-form>
     <!-- 文章的主题结构 -->
@@ -50,6 +50,13 @@
         </span>
       </div>
     </div>
+    <el-row type="flex" justify="center" style="height:80px" align="middle">
+         <el-pagination background layout="prev,pager,next"
+         :current-page="page.currentPage"
+         :page-size="page.pageSize"
+         :total="page.total"
+         @current-change='currentChang'></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -57,6 +64,14 @@
 export default {
   data () {
     return {
+      page: {
+        // 当前页面
+        currentPage: 1,
+        // 接口要求每页 10-50条
+        pageSize: 10,
+        //  总条数
+        total: 0
+      },
       searchFrom: {
         //   文章 状态
         // 0 -草稿 1 -待审核 2-审核通过 3 审核失败 4 -以删除 不传为全部  先将 5定义为全部
@@ -71,14 +86,37 @@ export default {
       defaultImg: require('../../assets/img/11.jpg')
     }
   },
+  // 监听data中的数据 变化
+  watch: {
+    searchFrom: {
+      // 固定写法 表示会深度检测searchfrom中数据变化
+      deep: true,
+      handler () {
+        this.changComditon()
+        this.page.currentPage = 1
+      }
+    }
+  },
   methods: {
+    // 分页插件 当页面改变的时候触发
+    currentChang (newPage) {
+      console.log(newPage)
+      console.log(1)
+
+      this.page.currentPage = newPage
+      this.changComditon()
+    },
+    // 当前频道放生改变的时候
+
     // 改变的条件
     changComditon () {
       const params = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize,
         status: this.searchFrom.status === 5 ? null : this.searchFrom.status,
         channel_id: this.searchFrom.channel_id,
-        begin_pundate: this.searchFrom.value1.length ? this.searchFrom.value1.length[0] : null,
-        end_pundate: this.searchFrom.value1.length > 1 ? this.searchFrom.value1.length[1] : null
+        begin_pubdate: this.searchFrom.value1 && this.searchFrom.value1.length ? this.searchFrom.value1[0] : null,
+        end_pubdate: this.searchFrom.value1 && this.searchFrom.value1.length > 1 ? this.searchFrom.value1[1] : null
       }
       this.getArticles(params)
     },
@@ -90,6 +128,7 @@ export default {
 
       }).then((res) => {
         this.list = res.data.results
+        this.page.total = res.data.total_count
       })
     },
     getAndChannels () {
