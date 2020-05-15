@@ -7,7 +7,7 @@
     <el-form style="padding-left:60px;">
       <el-form-item label="文章状态:">
         <!--  0 -草稿 1 -待审核 2-审核通过 3 审核失败 4 -以删除 不传为全部  先将 5定义为全部 -->
-        <el-radio-group v-model="searchFrom.status">
+        <el-radio-group v-model="searchFrom.status" @change='changComditon'>
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
           <el-radio :label="1">待审核</el-radio>
@@ -23,7 +23,8 @@
       </el-form-item>
       <el-form-item label="日期范围:">
         <!-- 时间选择组件  type-->
-        <el-date-picker type="daterange" v-model="searchFrom.value1"></el-date-picker>
+        <!-- 显示值和存储值得机构不一样 使用 value-format指定绑定值的格式 -->
+        <el-date-picker  value-format="yyyy-MM-dd"  type="daterange" v-model="searchFrom.value1"></el-date-picker>
       </el-form-item>
     </el-form>
     <!-- 文章的主题结构 -->
@@ -71,10 +72,21 @@ export default {
     }
   },
   methods: {
+    // 改变的条件
+    changComditon () {
+      const params = {
+        status: this.searchFrom.status === 5 ? null : this.searchFrom.status,
+        channel_id: this.searchFrom.channel_id,
+        begin_pundate: this.searchFrom.value1.length ? this.searchFrom.value1.length[0] : null,
+        end_pundate: this.searchFrom.value1.length > 1 ? this.searchFrom.value1.length[1] : null
+      }
+      this.getArticles(params)
+    },
     //   获取文章列表
-    getArticles () {
+    getArticles (params) {
       this.$axios({
-        url: '/articles'
+        url: '/articles',
+        params
 
       }).then((res) => {
         this.list = res.data.results
