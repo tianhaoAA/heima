@@ -30,13 +30,14 @@
     <el-row type="flex" class="footer" align="middle">
       <span>共找到1000条符合的内容</span>
     </el-row>
-    <div class="articles-item" v-for="item in 10" :key="item">
+    <div class="articles-item" v-for="item in list" :key="item.id.toString()">
       <div class="left">
-        <img src="http://image.biaobaiju.com/uploads/20180928/16/1538122139-VCTSxjGkvF.jpeg" alt />
+        <!-- 设置文章的封面信息 有的数组有值 有的没有值 没有值得情况下本地默认有一个图片 -->
+        <img :src=" item.cover.images.lenght? item.cover.images[0]:defaultImg" alt />
         <div class="info">
-          <span>我是小可爱</span>
-         <el-tag class="tag">已发表</el-tag>
-          <span class="date">2020年5月12日</span>
+          <span>{{ item.title }}</span>
+         <el-tag  :type="item.status | filterType" class="tag"> {{ item.status | filterStatus }} </el-tag>
+          <span class="date">{{ item.pubdate }}</span>
         </div>
       </div>
       <div class="right">
@@ -64,21 +65,60 @@ export default {
         value1: []
       },
       //   专门接受频道数据
-      channels: []
+      channels: [],
+      list: [],
+      defaultImg: require('../../assets/img/11.jpg')
     }
   },
   methods: {
+    //   获取文章列表
+    getArticles () {
+      this.$axios({
+        url: '/articles'
+
+      }).then((res) => {
+        this.list = res.data.results
+      })
+    },
     getAndChannels () {
       this.$axios({
         url: '/channels'
       }).then(res => {
         this.channels = res.data.channels
-        console.log(res)
       })
     }
   },
   created () {
     this.getAndChannels()
+    this.getArticles()
+  },
+  // 专门处理显示格式的
+  filters: {
+    filterStatus (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '以发表'
+        case 3:
+          return '审核失败'
+      }
+    },
+    // 根据当前状态的值 显示不同类型的tag 类型
+    filterType (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'info'
+        case 2:
+          return ''
+        case 3:
+          return 'danger'
+      }
+    }
   }
 }
 </script>
