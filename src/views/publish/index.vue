@@ -12,7 +12,7 @@
        <quill-editor  v-model="publishForm.content" style="height:300px" placeholder="请您输入内容" ></quill-editor>
         </el-form-item>
         <el-form-item label='封面' prop="cover" style="margin-top:120px">
-            <el-radio-group v-model="publishForm.cover.type">
+            <el-radio-group v-model="publishForm.cover.type" @change="changType">
                 <!-- 需要给el-radio 加label值 -->
                 <el-radio :label="1">单图</el-radio>
                 <el-radio :label="3">三图</el-radio>
@@ -62,6 +62,17 @@ export default {
     }
   },
   methods: {
+    // 选择图片的时候发生改变
+    changType () {
+      // 我们应该根据type的值 对 images 进行控制
+      if (this.publishForm.cover.type === 1) {
+        this.publishForm.cover.images = ['']
+      } else if (this.publishForm.cover.type === 3) {
+        this.publishForm.cover.images = ['', '', '']
+      } else {
+        this.publishForm.cover.images = []
+      }
+    },
     // 获取文章数据的方法
     getArticleById (id) {
       this.$axios({
