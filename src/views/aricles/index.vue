@@ -45,7 +45,8 @@
         <span>
           <i class="el-icon-edit"></i>修改
         </span>
-        <span>
+        <span  @click="delMaterial(item.id.toString())">
+          <!-- 需要传递参数 传递要删除的id id 有可能是大数字类型 -->
           <i class="el-icon-delete"></i>删除
         </span>
       </div>
@@ -55,7 +56,8 @@
          :current-page="page.currentPage"
          :page-size="page.pageSize"
          :total="page.total"
-         @current-change='currentChang'></el-pagination>
+         @current-change='currentChang'>
+         </el-pagination>
     </el-row>
   </el-card>
 </template>
@@ -98,6 +100,20 @@ export default {
     }
   },
   methods: {
+    // 删除文章
+    delMaterial (id) {
+      this.$confirm('您确定要删除此条数据', '提示').then(() => {
+        this.$axios({
+          url: `/articles/${id}`,
+          method: 'delete'
+        }).then((res) => {
+        // 应该带着条件 和页面加载数据
+          this.changComditon()
+        }).catch(() => {
+          this.$message.error('删除文章失败')
+        })
+      })
+    },
     // 分页插件 当页面改变的时候触发
     currentChang (newPage) {
       console.log(newPage)

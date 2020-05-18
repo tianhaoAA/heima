@@ -6,6 +6,10 @@
  **/
 import axios from 'axios'
 import router from '@/router'
+import JSONBig from 'json-bigint'
+axios.defaults.transformResponse = [function (data) {
+  return data ? JSONBig.parse(data) : {}
+}]
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
 // 请求拦截器
 
