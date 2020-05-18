@@ -20,6 +20,7 @@
                 <el-radio :label="-1">自动</el-radio>
             </el-radio-group>
         </el-form-item>
+        <cover-image @chlickImg='chlickImg1' :list='publishForm.cover.images'></cover-image>
         <el-form-item label='频道' prop="channel_id">
       <el-select placeholder="请选择频道" v-model="publishForm.channel_id">
               <!-- 下拉选项 v-for 循环生成 el-option-->
@@ -62,6 +63,10 @@ export default {
     }
   },
   methods: {
+    chlickImg1 (url, index) {
+      // 接收到了数据 更新images 数据
+      this.publishForm.cover.images.splice(index, 1, url)
+    },
     // 选择图片的时候发生改变
     changType () {
       // 我们应该根据type的值 对 images 进行控制

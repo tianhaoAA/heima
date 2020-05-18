@@ -34,7 +34,7 @@
     <div class="articles-item" v-for="item in list" :key="item.id.toString()">
       <div class="left">
         <!-- 设置文章的封面信息 有的数组有值 有的没有值 没有值得情况下本地默认有一个图片 -->
-        <img :src=" item.cover.images.lenght? item.cover.images[0]:defaultImg" alt />
+      <img :src=" item.cover.images.length ?  item.cover.images[0] : defaultImg" alt="">
         <div class="info">
           <span>{{ item.title }}</span>
          <el-tag  :type="item.status | filterType" class="tag"> {{ item.status | filterStatus }} </el-tag>
