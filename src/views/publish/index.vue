@@ -61,6 +61,14 @@ export default {
     }
   },
   methods: {
+    // 获取文章数据的方法
+    getArticleById (id) {
+      this.$axios({
+        url: `/articles/${id}`
+      }).then((res) => {
+        this.publishForm = res.data
+      })
+    },
     //   获取频道数据
     getChannels () {
       this.$axios({
@@ -69,25 +77,59 @@ export default {
         this.channles = res.data.channels
       })
     },
+    // 发布文章的方法
     publish (draft) {
       this.$refs.myForm.validate().then(() => {
+        const { id } = this.$route.params
         this.$axios({
-          method: 'post',
-          url: '/articles',
+          url: id ? `/articles/${id}` : '/articles',
+          method: id ? 'put' : 'post',
           params: { draft },
           data: this.publishForm
+        }).then(() => {
+          this.$message.success('发布成功')
+          this.$router.push('/home/artices')
+        }).catch(() => {
+          this.$message.error('发布失败')
         })
-      }).then(() => {
-        this.$message.success('发布成功')
-        this.$router.push('/home/artices')
-      }).catch(() => {
-        this.$message.error('发布失败')
+        // if (id) {
+        //   this.$axios({
+        //     url: `/articles/${id}`,
+        //     method: 'put',
+        //     params: { draft },
+        //     data: this.publishForm
+        //   }).then(() => {
+        //     this.$message.success('编辑成功')
+        //     this.$router.push('/home/artices')
+        //   }).catch(() => {
+        //     this.$message.error('编辑失败')
+        //   })
+        // } else {
+        //   this.$axios({
+        //     method: 'post',
+        //     url: '/articles',
+        //     params: { draft },
+        //     data: this.publishForm
+        //   }).then(() => {
+        //     this.$message.success('发布成功')
+        //     this.$router.push('/home/artices')
+        //   }).catch(() => {
+        //     this.$message.error('发布失败')
+        //   })
+        // }
       })
     }
 
   },
   created () {
     this.getChannels()
+    // 判断是否存在 文章 id 如果存在获取对应的数据
+    const { id } = this.$route.params
+    // if (id) {
+    //   // 获取文章的数据
+    //   this.getArticleById(id)
+    // }
+    id && this.getArticleById(id)
   }
 }
 </script>
