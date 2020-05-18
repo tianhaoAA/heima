@@ -34,7 +34,7 @@ const routes = [
         component: () => import('@/views/aricles')
       },
       {
-        path: 'publish',
+        path: 'publish/:id?',
         component: () => import('@/views/publish')
       }
     ]

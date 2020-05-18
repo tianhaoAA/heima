@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="right">
-        <span>
+        <span  @click="toPublish(item.id.toString())">
           <i class="el-icon-edit"></i>修改
         </span>
         <span  @click="delMaterial(item.id.toString())">
@@ -100,6 +100,10 @@ export default {
     }
   },
   methods: {
+    // 点击修改跳到发布页面的方法
+    toPublish (id) {
+      this.$router.push(`/home/publish/${id}`)
+    },
     // 删除文章
     delMaterial (id) {
       this.$confirm('您确定要删除此条数据', '提示').then(() => {
