@@ -7,7 +7,7 @@
     <el-form style="padding-left:60px;">
       <el-form-item label="文章状态:">
         <!--  0 -草稿 1 -待审核 2-审核通过 3 审核失败 4 -以删除 不传为全部  先将 5定义为全部 -->
-        <el-radio-group v-model="searchFrom.status" @change='changComditon'>
+        <el-radio-group v-model="searchFrom.status">
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
           <el-radio :label="1">待审核</el-radio>
@@ -16,7 +16,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="文章频道:">
-        <el-select @change="changComditon" placeholder="请选择频道" v-model="searchFrom.channel_id">
+        <el-select placeholder="请选择频道" v-model="searchFrom.channel_id">
           <!-- el-option 是下拉的选项 label 是显示值 value 是绑定值 -->
           <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
@@ -24,7 +24,7 @@
       <el-form-item label="日期范围:">
         <!-- 时间选择组件  type-->
         <!-- 显示值和存储值得机构不一样 使用 value-format指定绑定值的格式 -->
-        <el-date-picker @change="changComditon" value-format="yyyy-MM-dd"  type="daterange" v-model="searchFrom.value1"></el-date-picker>
+        <el-date-picker value-format="yyyy-MM-dd"  type="daterange" v-model="searchFrom.value1"></el-date-picker>
       </el-form-item>
     </el-form>
     <!-- 文章的主题结构 -->
@@ -167,8 +167,8 @@ export default {
           return '草稿'
         case 1:
           return '待审核'
-        case 2:
-          return '以发表'
+        case 2 :
+          return '已发表'
         case 3:
           return '审核失败'
       }
@@ -177,13 +177,13 @@ export default {
     filterType (value) {
       switch (value) {
         case 0:
-          return 'warning'
+          return 'warning' // 草稿的时候 警告
         case 1:
-          return 'info'
-        case 2:
-          return ''
+          return 'info' // 待审核
+        case 2 :
+          return '' // 已发表
         case 3:
-          return 'danger'
+          return 'danger' // 失败 错误
       }
     }
   }
