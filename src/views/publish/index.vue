@@ -8,9 +8,10 @@
             <el-input v-model="publishForm.title" placeholder="请您输入标题" style="width:60%"></el-input>
         </el-form-item>
         <el-form-item label='内容' prop="content">
-            <el-input v-model="publishForm.content" placeholder="请您输入内容" type="textarea" :rows="5"></el-input>
+            <!-- <el-input v-model="publishForm.content" placeholder="请您输入内容" type="textarea" :rows="5"></el-input> -->
+       <quill-editor  v-model="publishForm.content" style="height:300px" placeholder="请您输入内容" ></quill-editor>
         </el-form-item>
-        <el-form-item label='封面' prop="cover">
+        <el-form-item label='封面' prop="cover" style="margin-top:120px">
             <el-radio-group v-model="publishForm.cover.type">
                 <!-- 需要给el-radio 加label值 -->
                 <el-radio :label="1">单图</el-radio>
