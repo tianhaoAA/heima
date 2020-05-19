@@ -5,28 +5,53 @@
     </bread-crumb>
     <el-form label-width="100px">
       <el-form-item label="用户名">
-        <el-input style="width:30%"></el-input>
+        <el-input v-model="formData.name" style="width:30%"></el-input>
       </el-form-item>
       <el-form-item label="简介">
-        <el-input style="width:30%"></el-input>
+        <el-input   v-model="formData.intro"  style="width:30%"></el-input>
       </el-form-item>
       <el-form-item label="邮箱">
-        <el-input style="width:30%"></el-input>
+        <el-input style="width:30%" v-model="formData.email" ></el-input>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input disabled style="width:30%"></el-input>
+        <el-input disabled style="width:30%" v-model="formData.mobile" ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary">保存</el-button>
       </el-form-item>
     </el-form>
     <!-- 头像 -->
-      <img class='imggcc' src="http://imgsrc.baidu.com/forum/w=580/sign=91799a31324e251fe2f7e4f09786c9c2/2115a9529822720edcbedaf179cb0a46f31fabaf.jpg" alt="">
+      <img class='imggcc' :src="formData.photo" alt="">
   </el-card>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      formData: {
+        name: '',
+        intro: '',
+        photo: '',
+        email: '',
+        mobile: ''
+      }
+    }
+  },
+  methods: {
+    getUserInfo () {
+      this.$axios({
+        url: 'user/profile'
+      }).then((res) => {
+        this.formData = res.data
+        console.log(res)
+      })
+    }
+  },
+  created () {
+    this.getUserInfo()
+  }
+}
 </script>
 
 <style >
