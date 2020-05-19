@@ -62,6 +62,35 @@ export default {
       }
     }
   },
+  watch: {
+    // watch 是监听data中的数据变化
+    // 路由在初始之后 会把$route 也放置在 页面data 中
+    $route: function (to, from) {
+      //  监听$route的变化
+      //  to 表示新的路由地址对象
+      // from 表示旧的路由地址对象
+      // 根据to属性的params 的id的变化 来决定是不是改变数据
+      // 如果有id 应该获取编辑文章的的数据
+      // 如果没有id应该讲表单的数据设置为空
+      if (to.params.id) {
+        // 获取文件数据
+        this.getArticleById(to.params.id)
+      } else {
+        //
+        this.publishForm = {
+          title: '',
+          content: '',
+          cover: {
+          // -1是自动 0是无图 1是单图 3是三图
+            type: 0,
+            //   跟type 对应
+            images: []
+          },
+          channel_id: null
+        }
+      }
+    }
+  },
   methods: {
     chlickImg1 (url, index) {
       // 接收到了数据 更新images 数据
