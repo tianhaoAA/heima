@@ -26,16 +26,14 @@ export default {
   },
   methods: {
   // 获取评论数据的方法
-    getAndComment () {
-      this.$axios({
+    async   getAndComment () {
+      const res = await this.$axios({
         url: '/articles', // 请求地址
         params: {
           response_type: 'comment' // 此参数用来控制获取数据类型
         }
-
-      }).then((res) => {
-        this.list = res.data.results
       })
+      this.list = res.data.results
     }
   },
   created () {

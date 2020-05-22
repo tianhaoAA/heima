@@ -105,18 +105,18 @@ export default {
       this.$router.push(`/home/publish/${id}`)
     },
     // 删除文章
-    delMaterial (id) {
-      this.$confirm('您确定要删除此条数据', '提示').then(() => {
-        this.$axios({
+    async delMaterial (id) {
+      await this.$confirm('您确定要删除此条数据', '提示')
+      try {
+        await this.$axios({
           url: `/articles/${id}`,
           method: 'delete'
-        }).then((res) => {
-        // 应该带着条件 和页面加载数据
-          this.changComditon()
-        }).catch(() => {
-          this.$message.error('删除文章失败')
         })
-      })
+        // 应该带着条件 和页面加载数据
+        this.changComditon()
+      } catch (error) {
+        this.$message.error('删除文章失败')
+      }
     },
     // 分页插件 当页面改变的时候触发
     currentChang (newPage) {
@@ -141,15 +141,14 @@ export default {
       this.getArticles(params)
     },
     //   获取文章列表
-    getArticles (params) {
-      this.$axios({
+    async   getArticles (params) {
+      const res = await this.$axios({
         url: '/articles',
         params
 
-      }).then((res) => {
-        this.list = res.data.results
-        this.page.total = res.data.total_count
       })
+      this.list = res.data.results
+      this.page.total = res.data.total_count
     },
     getAndChannels () {
       this.$axios({
