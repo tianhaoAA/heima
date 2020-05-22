@@ -30,6 +30,7 @@
 
 <script>
 import eventBus from '@/utils/eventBus'
+import { uploadImg } from '@/api/uploadImg'
 export default {
   data () {
     return {
@@ -56,18 +57,25 @@ export default {
   },
   methods: {
     // 上传图片
-    uploadImg (pasms) {
+    async  uploadImg (pasms) {
       const data = new FormData()
       data.append('photo', pasms.file)
-      this.$axios({
-        url: 'user/photo',
-        method: 'patch',
-        data
-      }).then((res) => {
-        this.formData.photo = res.data.photo
-        eventBus.$emit('updateUser')
-      })
+      const res = await uploadImg(data)
+      this.formData.photo = res.data.photo
+      eventBus.$emit('updateUser')
     },
+    // uploadImg (pasms) {
+    //   const data = new FormData()
+    //   data.append('photo', pasms.file)
+    //   this.$axios({
+    //     url: 'user/photo',
+    //     method: 'patch',
+    //     data
+    //   }).then((res) => {
+    //     this.formData.photo = res.data.photo
+    //     eventBus.$emit('updateUser')
+    //   })
+    // },
     getUserInfo () {
       this.$axios({
         url: 'user/profile'
