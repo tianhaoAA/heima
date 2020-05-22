@@ -4,10 +4,15 @@ import VueRouter from 'vue-router'
 import Home from '../views/home'
 import login from '../views/login'
 import SecondHome from '../views/home/second-home'
+import coo from '../404'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '*',
+    component: coo
+  },
   {
     path: '/',
     redirect: '/home'
