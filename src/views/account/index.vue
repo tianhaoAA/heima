@@ -21,7 +21,10 @@
       </el-form-item>
     </el-form>
     <!-- 头像 -->
-      <img class='imggcc' :src="formData.photo ?formData.photo : defaultImg" alt="">
+    <el-upload  action="" :http-request="uploadImg" :show-file-list="false">
+  <img class='imggcc' :src="formData.photo ?formData.photo : defaultImg" alt="">
+    </el-upload>
+
   </el-card>
 </template>
 
@@ -51,6 +54,18 @@ export default {
     }
   },
   methods: {
+    // 上传图片
+    uploadImg (pasms) {
+      const data = new FormData()
+      data.append('photo', pasms.file)
+      this.$axios({
+        url: 'user/photo',
+        method: 'patch',
+        data
+      }).then((res) => {
+        this.formData.photo = res.data.photo
+      })
+    },
     getUserInfo () {
       this.$axios({
         url: 'user/profile'
