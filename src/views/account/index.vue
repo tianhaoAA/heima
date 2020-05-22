@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus'
 export default {
   data () {
     return {
@@ -64,6 +65,7 @@ export default {
         data
       }).then((res) => {
         this.formData.photo = res.data.photo
+        eventBus.$emit('updateUser')
       })
     },
     getUserInfo () {
@@ -80,9 +82,10 @@ export default {
           url: '/user/profile',
           method: 'patch',
           data: this.formData
-        }).then(() => [
+        }).then(() => {
           this.$message.success('保用户资料存成功')
-        ]).catch(() => {
+          // 广播
+        }).catch(() => {
           this.$message.error('保用户资料存失败')
         })
       })
