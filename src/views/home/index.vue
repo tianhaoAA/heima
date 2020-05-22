@@ -2,8 +2,8 @@
 <!-- 现在最外层放置一个大容器 小容器只能放在大容器里面1 -->
 
 <el-container>
-<el-aside style="width:230px">
-  <layout-aside></layout-aside>
+<el-aside  :style="{ width: collapse?'64px':'230px' }" style="transition:all 0.5s">
+  <layout-aside :collapse='collapse'></layout-aside>
 </el-aside>
 <el-container>
   <el-header>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import eventBus from '@/utils/eventBus'
 // import LayoutAside from './layot-aside'
 // import LayoutHeader from './layot-header'
 // export default {
@@ -27,7 +28,16 @@
 //   }
 // }
 export default {
-
+  data () {
+    return {
+      collapse: false
+    }
+  },
+  created () {
+    eventBus.$on('changeCollapse', () => {
+      this.collapse = !this.collapse
+    })
+  }
 }
 </script>
 

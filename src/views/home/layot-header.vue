@@ -2,7 +2,10 @@
   <!-- elementUI 布局组件  el-row 和el-col -->
   <el-row align="middle" type="flex" class="layout-header">
     <el-col class="left" :span="12">
-      <i class="el-icon-s-fold"></i>
+            <!-- class 是动态的图标 -->
+      <!-- <i class="el-icon-s-fold"></i> -->
+      <i @click="collapse=!collapse" :class="{ 'el-icon-s-fold':!collapse, 'el-icon-s-unfold':collapse }"></i>
+
       <span>江苏传智播客教育科技股份有限公司</span>
     </el-col>
     <el-col class="right" :span="12">
@@ -34,7 +37,13 @@ export default {
       // 用户个人信息
       userInfo: {
 
-      }
+      },
+      collapse: false
+    }
+  },
+  watch: {
+    collapse () {
+      eventBus.$emit('changeCollapse')
     }
   },
   methods: {
