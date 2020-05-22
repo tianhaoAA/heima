@@ -5,8 +5,12 @@
  * **/
 
 import router from '@/router'
+// 引入页面进度条
+import progress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 router.beforeEach(function (to, from, next) {
+  progress.start()
   // to 表示 你要到哪里去 是一个路由信息对象
   // from 表示 你从哪里来 是一个路由对象
   // next 是一个必须执行的函数 相当于 resolve ,如果不执行。就会报错
@@ -27,4 +31,8 @@ router.beforeEach(function (to, from, next) {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  setTimeout(() => progress.done(), 500)
 })
